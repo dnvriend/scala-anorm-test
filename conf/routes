@@ -1,0 +1,3 @@
+GET     /database/connection   com.github.dnvriend.component.controller.DatabaseController.getConnection
+GET     /database/one   com.github.dnvriend.component.controller.DatabaseController.getOne
+GET     /database/now   com.github.dnvriend.component.controller.DatabaseController.getNow
