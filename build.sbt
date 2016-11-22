@@ -5,6 +5,7 @@ version := "1.0-SNAPSHOT"
 scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
+  evolutions,
   jdbc,
   ws,
   "com.h2database" % "h2" % "1.4.193",

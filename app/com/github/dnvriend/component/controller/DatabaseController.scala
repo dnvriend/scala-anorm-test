@@ -20,12 +20,17 @@ import java.util.logging.Logger
 import javax.inject.Inject
 
 import anorm._
+import com.github.dnvriend.repository.{Person, PersonRepository}
 import play.api.db.Database
-import play.api.mvc.{Action, Controller}
+import play.api.libs.json.Json
+import play.api.mvc.{Action, AnyContent, Controller}
 
-class DatabaseController @Inject() (db: Database, logger: Logger) extends Controller {
+import scala.concurrent.{ExecutionContext, Future}
+
+class DatabaseController @Inject() (db: Database, repo: PersonRepository, logger: Logger)(implicit ec: ExecutionContext) extends Controller {
+  logger.info(s"==> Database: ${db.name}, ${db.url}")
+
   def getConnection = Action {
-    logger.info(s"Database: $db")
     db.withConnection { conn =>
       logger.info(s"Connection: $conn")
       Ok(s"$db, $conn")
@@ -44,5 +49,14 @@ class DatabaseController @Inject() (db: Database, logger: Logger) extends Contro
       val result = SQL("SELECT now()").as(SqlParser.date(1).single)
       Ok(s"$result")
     }
+  }
+
+  def getPeople: Action[AnyContent] =
+    Action.async(repo.getPeople.map(xs => Ok(Json.toJson(xs))))
+
+  def addPerson = Action.async { request =>
+    request.body.asJson.flatMap(_.asOpt[Person]).map { person =>
+      repo.addPerson(person).map(x => Ok(Json.toJson(x)))
+    }.getOrElse(Future.successful(BadRequest("")))
   }
 }

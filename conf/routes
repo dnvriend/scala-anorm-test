@@ -1,3 +1,6 @@
-GET     /database/connection   com.github.dnvriend.component.controller.DatabaseController.getConnection
-GET     /database/one   com.github.dnvriend.component.controller.DatabaseController.getOne
-GET     /database/now   com.github.dnvriend.component.controller.DatabaseController.getNow
+GET        /database/connection        com.github.dnvriend.component.controller.DatabaseController.getConnection
+GET        /database/one               com.github.dnvriend.component.controller.DatabaseController.getOne
+GET        /database/now               com.github.dnvriend.component.controller.DatabaseController.getNow
+GET        /people                     com.github.dnvriend.component.controller.DatabaseController.getPeople
+
+POST        /people                     com.github.dnvriend.component.controller.DatabaseController.addPerson
