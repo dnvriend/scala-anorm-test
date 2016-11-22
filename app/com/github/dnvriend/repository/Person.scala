@@ -17,11 +17,11 @@
 package com.github.dnvriend.repository
 
 import anorm.{Macro, RowParser}
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json.Json
 
 object Person {
   val parser: RowParser[Person] = Macro.namedParser[Person]
-  implicit val format: OFormat[Person] = Json.format[Person]
+  implicit val format = Json.format[Person]
 }
 
 final case class Person(id: Option[Long], name: String, age: Int)

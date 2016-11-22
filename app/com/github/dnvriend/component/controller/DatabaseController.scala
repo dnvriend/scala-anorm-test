@@ -22,10 +22,12 @@ import javax.inject.Inject
 import anorm._
 import com.github.dnvriend.repository.{Person, PersonRepository}
 import play.api.db.Database
-import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, Controller}
+import play.api.libs.json.{Format, Json, Writes}
+import play.api.mvc.{Action, AnyContent, Controller, Result}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.language.implicitConversions
+import Person._
 
 class DatabaseController @Inject() (db: Database, repo: PersonRepository, logger: Logger)(implicit ec: ExecutionContext) extends Controller {
   logger.info(s"==> Database: ${db.name}, ${db.url}")
@@ -54,9 +56,17 @@ class DatabaseController @Inject() (db: Database, repo: PersonRepository, logger
   def getPeople: Action[AnyContent] =
     Action.async(repo.getPeople.map(xs => Ok(Json.toJson(xs))))
 
-  def addPerson = Action.async { request =>
+  def addPerson(): Action[AnyContent] = Action.async { request =>
     request.body.asJson.flatMap(_.asOpt[Person]).map { person =>
       repo.addPerson(person).map(x => Ok(Json.toJson(x)))
     }.getOrElse(Future.successful(BadRequest("")))
   }
+
+  def getPersonById(id: Long): Action[AnyContent] =
+    Action.async(
+      repo.getPersonOpt(id)
+        .map(y =>
+          y.map(x => Ok(Json.toJson(x)))
+            .getOrElse(NotFound(s"Person for id: $id")))
+    )
 }
