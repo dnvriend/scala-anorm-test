@@ -20,14 +20,15 @@ import java.util.logging.Logger
 import javax.inject.Inject
 
 import anorm._
+import com.github.dnvriend.component.controller.marshaller.MarshallerOps._
+import com.github.dnvriend.repository.Person._
 import com.github.dnvriend.repository.{Person, PersonRepository}
 import play.api.db.Database
-import play.api.libs.json.{Format, Json, Writes}
-import play.api.mvc.{Action, AnyContent, Controller, Result}
+import play.api.libs.json.Json
+import play.api.mvc._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.implicitConversions
-import Person._
 
 class DatabaseController @Inject() (db: Database, repo: PersonRepository, logger: Logger)(implicit ec: ExecutionContext) extends Controller {
   logger.info(s"==> Database: ${db.name}, ${db.url}")
@@ -54,7 +55,7 @@ class DatabaseController @Inject() (db: Database, repo: PersonRepository, logger
   }
 
   def getPeople: Action[AnyContent] =
-    Action.async(repo.getPeople.map(xs => Ok(Json.toJson(xs))))
+    Action.async(repo.getPeople)
 
   def addPerson(): Action[AnyContent] = Action.async { request =>
     request.body.asJson.flatMap(_.asOpt[Person]).map { person =>
@@ -63,10 +64,6 @@ class DatabaseController @Inject() (db: Database, repo: PersonRepository, logger
   }
 
   def getPersonById(id: Long): Action[AnyContent] =
-    Action.async(
-      repo.getPersonOpt(id)
-        .map(y =>
-          y.map(x => Ok(Json.toJson(x)))
-            .getOrElse(NotFound(s"Person for id: $id")))
-    )
+    Action.async(repo.getPersonOpt(id))
+
 }
