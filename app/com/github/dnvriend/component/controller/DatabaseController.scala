@@ -16,8 +16,8 @@
 
 package com.github.dnvriend.component.controller
 
-import java.util.logging.Logger
 import javax.inject.Inject
+import java.util.logging.Logger
 
 import anorm._
 import com.github.dnvriend.component.controller.marshaller.MarshallerOps._

@@ -11,12 +11,13 @@ libraryDependencies ++= Seq(
   "com.h2database" % "h2" % "1.4.193",
   "com.zaxxer" % "HikariCP" % "2.5.1",
   "org.scalaz" %% "scalaz-core" % "7.2.7",
+  "org.typelevel" %% "scalaz-outlaws" % "0.2",
   "com.typesafe.akka" %% "akka-slf4j" % "2.4.13",
   "ch.qos.logback" % "logback-classic" % "1.1.7",
   "com.typesafe.play" %% "anorm" % "2.5.2",
   "com.github.dnvriend" %% "akka-persistence-inmemory" % "1.3.15" % Test,
   "org.mockito" % "mockito-core" % "2.2.21" % Test,
-  "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
+  "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0-M1" % Test
 )
 
 licenses += ("Apache-2.0", url("http://opensource.org/licenses/apache2.0.php"))
